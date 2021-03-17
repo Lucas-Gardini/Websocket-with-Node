@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Real Time Chat</title>
+	</head>
+	<body>
+		<h1>Chat with WebSocket</h1>
+		<div>
+			<input id="message" type="text" />
+			<button id="send" type="button" disabled="true">Send</button>
+		</div>
+		<div id="messageDiv"></div>
+		<script>
+			const ws = new WebSocket("ws://localhost:8080");
+			ws.onopen = () => {
+				console.log("WebSocket open");
+				document.querySelector("#send").disabled = false;
+				document.querySelector("#send").addEventListener("click", () => {
+					console.log("Sending message...");
+					ws.send(document.querySelector("#message").value);
+				});
+			};
+
+			ws.onmessage = (msg) => {
+				document.querySelector("#messageDiv").innerHTML += `<div>${msg.data}</div>`;
+			};
+		</script>
+	</body>
+</html>
